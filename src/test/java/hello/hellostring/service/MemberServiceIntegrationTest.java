@@ -4,28 +4,25 @@ import hello.hellostring.domain.Member;
 import hello.hellostring.repository.MemberRepository;
 import hello.hellostring.repository.MemoryMemberRepository;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class MemberServiceTest {
+@SpringBootTest
+@Transactional
+// test를 실행할때 먼저 실행되고, db에 데이터를 넣고 테스트가 종료되면,
+// rollback을 실행해서 테스트에 사용된 데이터를 삭제해서 테스트내용이 db에 반영이 되지않도록 보존해준다.
+// 반복해서 test가능
 
-    MemberService memberService;
-    MemberRepository memberRepository;
+class MemberServiceIntegrationTest {
 
-    @BeforeEach //
-    public void BeforeEach(){
-        memberRepository = new MemoryMemberRepository();
-        memberService = new MemberService(memberRepository);
-    }
-
-//    @AfterEach //
-//    public void AfterEach(){
-//        memberRepository.clearStore();
-//    }
+   @Autowired MemberService memberService;
+   @Autowired MemberRepository memberRepository;
 
     @Test
     void join() {
@@ -64,13 +61,4 @@ class MemberServiceTest {
 
     }
         //then
-
-
-    @Test
-    void findMembers() {
-    }
-
-    @Test
-    void findOne() {
-    }
 }
